@@ -1,0 +1,305 @@
+/* General App Stylesheet - Bento Grid Theme Upgrade */
+
+/* Colors & Theme variables */
+:root {
+  --color-charcoal: #0f172a; /* Deep slate-900 */
+  --color-charcoal-light: #1e293b; /* Slate-800 */
+  --color-teal: #4f46e5; /* Modern Indigo */
+  --color-teal-hover: #4338ca; /* Indigo hover */
+  --color-teal-light: #e0e7ff; /* Soft Indigo */
+  --color-bg-light: #f1f5f9; /* Slate-100 bento background */
+  --color-border: #e2e8f0; /* Slate-200 bento card border */
+  --font-sans: 'Inter', -apple-system, system-ui, sans-serif;
+  --font-display: 'Inter', -apple-system, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body, .bg-light {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-light) !important;
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typography styles */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.text-2xs {
+  font-size: 0.65rem;
+}
+
+.text-3xs {
+  font-size: 0.55rem;
+}
+
+.bg-charcoal {
+  background-color: var(--color-charcoal) !important;
+}
+
+.bg-charcoal-subtle {
+  background-color: #f8fafc !important; /* Stat icon bg */
+}
+
+.text-teal {
+  color: var(--color-teal) !important;
+}
+
+.text-secondary-light {
+  color: #64748b !important;
+}
+
+.text-info-dark {
+  color: #0369a1 !important;
+}
+
+.text-warning-dark {
+  color: #a16207 !important;
+}
+
+/* Bento Cards styling for standard bootstrap cards */
+.bento-card, .card, .card-custom, .rounded-card {
+  background: #ffffff !important;
+  border: 1.5px solid var(--color-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03) !important;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Bento Header bar transforms */
+.card-header, .bento-card-header {
+  background-color: #ffffff !important;
+  color: var(--color-charcoal) !important;
+  border-bottom: 1.5px solid var(--color-border) !important;
+  padding: 16px 24px !important;
+}
+
+.card-header h2, .card-header h3, .card-header h4, .card-header h5 {
+  color: var(--color-charcoal) !important;
+  font-weight: 800 !important;
+}
+
+.card-header .badge {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+/* Form selects and inputs styling to match Bento inputs */
+.form-select, .form-control {
+  background-color: #f8fafc !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  color: #1e293b !important;
+  font-size: 0.875rem !important;
+  padding: 0.5rem 0.75rem !important;
+  transition: all 0.15s ease-in-out;
+}
+
+.form-select:focus, .form-control:focus {
+  border-color: var(--color-teal) !important;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
+  background-color: #ffffff !important;
+}
+
+.form-select-lg, .form-control-lg {
+  font-size: 0.95rem !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.form-select-sm, .form-control-sm {
+  font-size: 0.75rem !important;
+  padding: 0.35rem 0.6rem !important;
+}
+
+/* Sidebar Subject Sub-cards */
+.subject-card {
+  background-color: #f8fafc !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 8px !important;
+  padding: 14px !important;
+}
+
+/* Sidebar Headings styling */
+.scrollable-sidebar h5 {
+  font-size: 0.7rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+  color: #64748b !important;
+  font-weight: 700 !important;
+  border-bottom: 1.5px solid #f1f5f9 !important;
+  padding-bottom: 10px !important;
+  margin-bottom: 14px !important;
+}
+
+/* Buttons upgrade */
+.btn-teal {
+  background-color: var(--color-teal) !important;
+  border-color: var(--color-teal) !important;
+  color: white !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+  transition: all 0.2s ease;
+}
+
+.btn-teal:hover, .btn-teal:focus {
+  background-color: var(--color-teal-hover) !important;
+  border-color: var(--color-teal-hover) !important;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15) !important;
+}
+
+.btn-outline-teal {
+  color: var(--color-teal) !important;
+  border-color: #cbd5e1 !important;
+  background-color: #ffffff !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-teal:hover {
+  background-color: #f8fafc !important;
+  color: var(--color-teal) !important;
+  border-color: #cbd5e1 !important;
+}
+
+.btn-outline-charcoal {
+  color: #475569 !important;
+  border-color: #cbd5e1 !important;
+  background-color: #ffffff !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}
+
+.btn-outline-charcoal:hover {
+  background-color: #f8fafc !important;
+  color: var(--color-charcoal) !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Modern Minimalist Tables for the Saved list */
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-border-color: #e2e8f0;
+}
+
+.table thead th {
+  background-color: #f8fafc !important;
+  color: #475569 !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  border-bottom: 1.5px solid #e2e8f0 !important;
+  padding: 12px 16px !important;
+}
+
+.table tbody td {
+  padding: 14px 16px !important;
+}
+
+/* Statistics container bento blocks styling */
+#statistics-container .p-3.bg-light {
+  background-color: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+  padding: 16px 20px !important;
+}
+
+/* Stat Icon styling */
+.stats-icon {
+  background: #f8fafc !important;
+  border-radius: 8px !important;
+  padding: 8px !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #475569 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 42px !important;
+  height: 42px !important;
+}
+
+/* Sleek Navbar */
+.navbar.bg-charcoal {
+  background-color: #ffffff !important;
+  border-bottom: 1.5px solid #e2e8f0 !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
+}
+
+.navbar.bg-charcoal .navbar-brand {
+  color: var(--color-charcoal) !important;
+}
+
+.navbar.bg-charcoal .nav-link {
+  color: #475569 !important;
+}
+
+.navbar.bg-charcoal .nav-link:hover {
+  color: var(--color-charcoal) !important;
+}
+
+.navbar.bg-charcoal .navbar-toggler {
+  color: #475569 !important;
+}
+
+/* Footer modern light upgrade */
+footer.bg-charcoal {
+  background-color: #ffffff !important;
+  border-top: 1.5px solid var(--color-border) !important;
+}
+
+footer.bg-charcoal p {
+  color: #64748b !important;
+}
+
+/* Scrollable sidebar customization */
+.scrollable-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollable-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollable-sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* Conflict banner redesign to look like standard Bento alert panel */
+.alert-danger {
+  background-color: #fee2e2 !important;
+  border: 1.5px solid #fecaca !important;
+  color: #991b1b !important;
+  border-radius: 12px !important;
+}
+
+/* Animations */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.animate-shake {
+  animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes pulse-border {
+  0%, 100% { border-color: #ef4444; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.3); }
+  50% { border-color: #b91c1c; box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1); }
+}
+
+.animate-pulse-border {
+  animation: pulse-border 1.8s infinite ease-in-out;
+}

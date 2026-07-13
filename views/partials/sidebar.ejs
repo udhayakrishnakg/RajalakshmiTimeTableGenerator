@@ -1,0 +1,94 @@
+<div class="card border-0 shadow-sm bg-white overflow-hidden rounded-card">
+  <div class="card-header bg-charcoal text-white py-3 px-4 d-flex align-items-center justify-content-between border-0">
+    <div class="d-flex align-items-center">
+      <i class="bi bi-sliders text-teal me-2 fs-5"></i>
+      <h3 class="font-display fw-bold mb-0 fs-5">Subject Selections</h3>
+    </div>
+    <span class="badge bg-secondary font-mono px-2 py-1 text-xs">S<%= semester %></span>
+  </div>
+
+  <div class="card-body p-4 scrollable-sidebar" style="max-height: calc(100vh - 180px); overflow-y: auto;">
+    <h5 class="font-display fw-bold text-charcoal border-bottom pb-2 mb-3 d-flex align-items-center">
+      <i class="bi bi-book-half text-teal me-2 fs-6"></i> Theory Subjects
+    </h5>
+    
+    <% if (theorySubjects.length === 0) { %>
+      <div class="text-center text-muted py-3">
+        <small>No theory subjects available.</small>
+      </div>
+    <% } %>
+
+    <% theorySubjects.forEach(sub => { %>
+      <div class="mb-4 p-3 bg-light rounded border border-light-subtle subject-card" data-course="<%= sub.course_code %>">
+        <div class="d-flex align-items-start justify-content-between mb-1.5">
+          <span class="badge bg-primary-subtle text-primary font-mono fw-bold px-2 py-1 text-2xs"><%= sub.course_code %></span>
+        </div>
+        <div class="fw-semibold text-charcoal text-sm mb-2 leading-tight"><%= sub.course_name %></div>
+        
+        <div>
+          <label class="form-label text-2xs font-sans fw-bold text-uppercase tracking-wider text-muted mb-1">Select Teacher</label>
+          <select class="form-select form-select-sm border-secondary-subtle select-theory-teacher" data-course="<%= sub.course_code %>">
+            <option value="">-- No Teacher Selected --</option>
+            <% sub.teachers.forEach(teacher => { %>
+              <option value="<%= teacher %>" <%= selectedTheory[sub.course_code] === teacher ? 'selected' : '' %>>
+                <%= teacher %>
+              </option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+    <% }) %>
+
+    <h5 class="font-display fw-bold text-charcoal border-bottom pb-2 mb-3 mt-4 d-flex align-items-center">
+      <i class="bi bi-activity text-teal me-2 fs-6"></i> Lab Subjects
+    </h5>
+
+    <% if (labSubjects.length === 0) { %>
+      <div class="text-center text-muted py-3">
+        <small>No lab subjects available.</small>
+      </div>
+    <% } %>
+
+    <% labSubjects.forEach(lab => { %>
+      <div class="mb-4 p-3 bg-light rounded border border-light-subtle subject-card" data-course="<%= lab.course_code %>">
+        <div class="d-flex align-items-start justify-content-between mb-1.5">
+          <span class="badge bg-success-subtle text-success font-mono fw-bold px-2 py-1 text-2xs"><%= lab.course_code %></span>
+        </div>
+        <div class="fw-semibold text-charcoal text-sm mb-2 leading-tight"><%= lab.course_name %></div>
+        
+        <div class="mb-2">
+          <label class="form-label text-2xs font-sans fw-bold text-uppercase tracking-wider text-muted mb-1">Select Teacher</label>
+          <select class="form-select form-select-sm border-secondary-subtle select-lab-teacher" 
+                  data-course="<%= lab.course_code %>"
+                  data-teacher-batches="<%= JSON.stringify(lab.teacherBatches) %>">
+            <option value="">-- No Teacher Selected --</option>
+            <% lab.teachers.forEach(teacher => { %>
+              <option value="<%= teacher %>" <%= (selectedLabs[lab.course_code] && selectedLabs[lab.course_code].teacher === teacher) ? 'selected' : '' %>>
+                <%= teacher %>
+              </option>
+            <% }) %>
+          </select>
+        </div>
+
+        <div class="div-batch-select" style="display: <%= (selectedLabs[lab.course_code] && selectedLabs[lab.course_code].teacher) ? 'block' : 'none' %>;">
+          <label class="form-label text-2xs font-sans fw-bold text-uppercase tracking-wider text-muted mb-1">Select Batch</label>
+          <select class="form-select form-select-sm border-secondary-subtle select-lab-batch" data-course="<%= lab.course_code %>">
+            <!-- Batches will be populated dynamically via public/js/sidebar.js -->
+            <option value="">-- Common Session / Select --</option>
+            <% 
+              if (selectedLabs[lab.course_code] && selectedLabs[lab.course_code].teacher) { 
+                const activeTeacher = selectedLabs[lab.course_code].teacher;
+                const teacherBatches = lab.teacherBatches[activeTeacher] || [];
+                teacherBatches.forEach(b => {
+            %>
+                  <option value="<%= b %>" <%= selectedLabs[lab.course_code].batch === b ? 'selected' : '' %>><%= b %></option>
+            <% 
+                });
+              } 
+            %>
+          </select>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>

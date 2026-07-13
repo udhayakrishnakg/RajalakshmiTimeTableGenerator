@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Timetable - <%= department %> Semester <%= semester %></title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #333;
+      padding: 20px;
+      background-color: #fff;
+    }
+    h1 {
+      text-align: center;
+      color: #1f497d;
+      margin-bottom: 5px;
+      font-size: 22px;
+    }
+    h2 {
+      text-align: center;
+      color: #555;
+      font-size: 14px;
+      margin-top: 0;
+      margin-bottom: 25px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+      font-size: 11px;
+      vertical-align: middle;
+      word-wrap: break-word;
+    }
+    th {
+      background-color: #366092;
+      color: white;
+      font-weight: bold;
+      height: 30px;
+    }
+    .time-column {
+      background-color: #f5f5f5;
+      font-weight: bold;
+      width: 100px;
+    }
+    .theory-session {
+      background-color: #dce6f1;
+      color: #0f243e;
+      border-radius: 4px;
+    }
+    .lab-session {
+      background-color: #e2efda;
+      color: #274e13;
+      border-radius: 4px;
+    }
+    .conflict-session {
+      background-color: #fce4d6;
+      color: #c00000;
+      border: 2px solid #c00000;
+    }
+    .session-code {
+      font-weight: bold;
+      font-size: 12px;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .session-teacher {
+      font-style: italic;
+      color: #555;
+      display: block;
+      font-size: 9px;
+    }
+    .session-room {
+      font-size: 9px;
+      display: block;
+      margin-top: 2px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>UNIVERSITY CLASS TIMETABLE</h1>
+  <h2><%= department %> &bull; Semester <%= semester %></h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 100px;">Time Slot</th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% 
+        const slotsTimes = [
+          "8:00 - 8:50",
+          "9:00 - 9:50",
+          "10:00 - 10:50",
+          "11:00 - 11:50",
+          "12:00 - 12:50",
+          "1:00 - 1:50",
+          "2:00 - 2:50",
+          "3:10 - 4:00",
+          "4:10 - 5:00"
+        ];
+        const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+        
+        // Build a grid structure
+        const grid = Array(9).fill(null).map(() => Array(6).fill(null));
+        
+        // Helper to find which theory slots are spanned by a lab
+        const getSpannedSlots = (timeRange) => {
+          if (!timeRange) return [];
+          const parsePart = (part) => {
+            const [hStr, mStr] = part.split(':');
+            let h = parseInt(hStr, 10);
+            const m = parseInt(mStr, 10);
+            if (h >= 1 && h <= 7) h += 12;
+            return h * 60 + m;
+          };
+          const parts = timeRange.split('-').map(p => p.trim());
+          const r = { start: parsePart(parts[0]), end: parsePart(parts[1]) };
+          
+          const theoryRanges = [
+            { idx: 0, start: 480, end: 530 },
+            { idx: 1, start: 540, end: 590 },
+            { idx: 2, start: 600, end: 650 },
+            { idx: 3, start: 660, end: 710 },
+            { idx: 4, start: 720, end: 770 },
+            { idx: 5, start: 780, end: 830 },
+            { idx: 6, start: 840, end: 890 },
+            { idx: 7, start: 910, end: 960 },
+            { idx: 8, start: 970, end: 1020 }
+          ];
+          
+          const indices = [];
+          theoryRanges.forEach(tr => {
+            if (Math.max(r.start, tr.start) < Math.min(r.end, tr.end)) {
+              indices.push(tr.idx);
+            }
+          });
+          return indices;
+        };
+
+        // Populate theory
+        selectedSlots.forEach(slot => {
+          if (slot.type === 'theory') {
+            const dIdx = dayKeys.indexOf(slot.day.toLowerCase().trim());
+            const sIdx = slot.slot_index;
+            if (dIdx !== -1 && sIdx !== undefined && sIdx !== null) {
+              grid[sIdx][dIdx] = {
+                type: 'theory',
+                code: slot.course_code,
+                teacher: slot.teacher_name,
+                room: slot.room_number,
+                span: 1
+              };
+            }
+          }
+        });
+
+        // Populate labs (incorporating row spans)
+        const skipped = Array(9).fill(null).map(() => Array(6).fill(false));
+        selectedSlots.forEach(slot => {
+          if (slot.type === 'lab') {
+            const dIdx = dayKeys.indexOf(slot.day.toLowerCase().trim());
+            const spans = getSpannedSlots(slot.time_range);
+            if (dIdx !== -1 && spans.length > 0) {
+              const first = spans[0];
+              grid[first][dIdx] = {
+                type: 'lab',
+                code: slot.course_code,
+                teacher: slot.teacher_name,
+                room: slot.room_number,
+                batch: slot.batch_label,
+                span: spans.length
+              };
+              for (let i = 1; i < spans.length; i++) {
+                skipped[spans[i]][dIdx] = true;
+              }
+            }
+          }
+        });
+      %>
+
+      <% for (let r = 0; r < 9; r++) { %>
+        <tr>
+          <td class="time-column"><%= slotsTimes[r] %></td>
+          <% for (let c = 0; c < 6; c++) { %>
+            <% if (skipped[r][c]) continue; %>
+            <% const item = grid[r][c]; %>
+            <% if (item) { %>
+              <td class="<%= item.type === 'theory' ? 'theory-session' : 'lab-session' %>" rowspan="<%= item.span %>">
+                <span class="session-code"><%= item.code %></span>
+                <span class="session-teacher"><%= item.teacher || 'N/A' %></span>
+                <span class="session-room">Room: <%= item.room || 'N/A' %> <%= item.batch ? `[${item.batch}]` : '' %></span>
+              </td>
+            <% } else { %>
+              <td>&mdash;</td>
+            <% } %>
+          <% } %>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+
+</body>
+</html>

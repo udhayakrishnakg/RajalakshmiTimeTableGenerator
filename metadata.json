@@ -1,0 +1,6 @@
+{
+  "name": "University Teacher Timetable Generator",
+  "description": "An interactive web application to generate, view, check conflicts, and export university schedules for teachers and students.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

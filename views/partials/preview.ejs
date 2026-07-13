@@ -1,0 +1,168 @@
+<%
+  // 9 Standard Slots
+  const slotsTimes = [
+    "8:00 - 8:50",
+    "9:00 - 9:50",
+    "10:00 - 10:50",
+    "11:00 - 11:50",
+    "12:00 - 12:50",
+    "1:00 - 1:50",
+    "2:00 - 2:50",
+    "3:10 - 4:00",
+    "4:10 - 5:00"
+  ];
+
+  const dayIndexes = {
+    'monday': 2,
+    'tuesday': 3,
+    'wednesday': 4,
+    'thursday': 5,
+    'friday': 6,
+    'saturday': 7
+  };
+
+  const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+  // Identify conflicted course codes to highlight them in red
+  const conflictedCodes = new Set();
+  conflicts.forEach(c => {
+    conflictedCodes.add(c.code1);
+    conflictedCodes.add(c.code2);
+  });
+
+  // Helper to find spanned slots for lab sessions
+  const getSpannedSlots = (timeRange) => {
+    if (!timeRange) return [];
+    const parseTimeRangeLocal = (timeStr) => {
+      const parts = timeStr.split('-').map(p => p.trim());
+      if (parts.length !== 2) return null;
+      
+      const parsePart = (part) => {
+        const [hStr, mStr] = part.split(':');
+        let h = parseInt(hStr, 10);
+        const m = parseInt(mStr, 10);
+        if (h >= 1 && h <= 7) {
+          h += 12;
+        }
+        return h * 60 + m;
+      };
+
+      try {
+        return { start: parsePart(parts[0]), end: parsePart(parts[1]) };
+      } catch (err) {
+        return null;
+      }
+    };
+
+    const r = parseTimeRangeLocal(timeRange);
+    if (!r) return [];
+
+    const theoryRanges = [
+      { idx: 0, start: 480, end: 530 },
+      { idx: 1, start: 540, end: 590 },
+      { idx: 2, start: 600, end: 650 },
+      { idx: 3, start: 660, end: 710 },
+      { idx: 4, start: 720, end: 770 },
+      { idx: 5, start: 780, end: 830 },
+      { idx: 6, start: 840, end: 890 },
+      { idx: 7, start: 910, end: 960 },
+      { idx: 8, start: 970, end: 1020 }
+    ];
+
+    const indices = [];
+    theoryRanges.forEach(tr => {
+      const overlapStart = Math.max(r.start, tr.start);
+      const overlapEnd = Math.min(r.end, tr.end);
+      if (overlapStart < overlapEnd) {
+        indices.push(tr.idx);
+      }
+    });
+    return indices;
+  };
+%>
+
+<div class="timetable-grid-wrapper">
+  <div class="timetable-grid" id="main-timetable">
+    <!-- Headers -->
+    <div class="grid-header-cell time-col font-display fw-bold">Time</div>
+    <% daysList.forEach(day => { %>
+      <div class="grid-header-cell font-display fw-bold"><%= day %></div>
+    <% }) %>
+
+    <!-- Empty background placeholder cells for grid lines -->
+    <% for (let r = 0; r < 9; r++) { %>
+      <!-- Time label cell -->
+      <div class="grid-time-label-cell font-mono text-xs" style="grid-column: 1; grid-row: <%= r + 2 %>;">
+        <span class="d-block fw-semibold"><%= slotsTimes[r].split(' - ')[0] %></span>
+        <span class="text-muted text-3xs"><%= slotsTimes[r].split(' - ')[1] %></span>
+      </div>
+      
+      <!-- Day background slots -->
+      <% for (let c = 2; c <= 7; c++) { %>
+        <div class="grid-bg-cell" style="grid-column: <%= c %>; grid-row: <%= r + 2 %>;"></div>
+      <% } %>
+    <% } %>
+
+    <!-- Render active theory sessions -->
+    <% selectedSlots.forEach(slot => { %>
+      <% if (slot.type === 'theory') { %>
+        <% 
+          const dIdx = dayIndexes[slot.day.toLowerCase().trim()];
+          const sIdx = slot.slot_index;
+          if (dIdx && sIdx !== undefined && sIdx !== null) {
+            const hasConflict = conflictedCodes.has(slot.course_code);
+            const gridRow = sIdx + 2; 
+        %>
+          <div class="timetable-card theory-card <%= hasConflict ? 'conflict-highlight animate-pulse-border' : '' %>" 
+               style="grid-column: <%= dIdx %>; grid-row: <%= gridRow %>;"
+               data-course="<%= slot.course_code %>"
+               data-type="theory">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+              <span class="card-course-code"><%= slot.course_code %></span>
+              <span class="card-badge">TH</span>
+            </div>
+            <div class="card-course-name text-truncate" title="<%= slot.course_name %>"><%= slot.course_name %></div>
+            <div class="card-teacher-name text-truncate" title="<%= slot.teacher_name %>">
+              <i class="bi bi-person me-0.5 text-secondary"></i><%= slot.teacher_name || 'N/A' %>
+            </div>
+            <div class="card-room-number mt-1 text-truncate">
+              <i class="bi bi-geo-alt me-0.5 text-secondary"></i><%= slot.room_number || 'N/A' %>
+            </div>
+            <div class="card-group text-3xs mt-0.5 text-muted text-truncate"><%= slot.group_name %></div>
+          </div>
+        <% } %>
+      <% } else if (slot.type === 'lab') { %>
+        <!-- Render active lab sessions spanning multiple cells -->
+        <% 
+          const dIdx = dayIndexes[slot.day.toLowerCase().trim()];
+          const spans = getSpannedSlots(slot.time_range);
+          if (dIdx && spans.length > 0) {
+            const firstRow = spans[0] + 2;
+            const lastRow = spans[spans.length - 1] + 2;
+            const hasConflict = conflictedCodes.has(slot.course_code);
+        %>
+          <div class="timetable-card lab-card <%= hasConflict ? 'conflict-highlight animate-pulse-border' : '' %>" 
+               style="grid-column: <%= dIdx %>; grid-row: <%= firstRow %> / <%= lastRow + 1 %>;"
+               data-course="<%= slot.course_code %>"
+               data-type="lab">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+              <span class="card-course-code"><%= slot.course_code %></span>
+              <span class="card-badge">LAB</span>
+            </div>
+            <div class="card-course-name text-truncate-2" title="<%= slot.course_name %>"><%= slot.course_name %></div>
+            <div class="card-teacher-name text-truncate" title="<%= slot.teacher_name %>">
+              <i class="bi bi-person me-0.5 text-secondary"></i><%= slot.teacher_name || 'N/A' %>
+            </div>
+            <div class="card-room-number mt-1 text-truncate">
+              <i class="bi bi-geo-alt me-0.5 text-secondary"></i><%= slot.room_number || 'N/A' %>
+              <% if (slot.batch_label) { %>
+                <span class="ms-1 card-batch-label"><%= slot.batch_label %></span>
+              <% } %>
+            </div>
+            <div class="card-group text-3xs mt-0.5 text-muted text-truncate"><%= slot.group_name %></div>
+          </div>
+        <% } %>
+      <% } %>
+    <% }) %>
+  </div>
+</div>

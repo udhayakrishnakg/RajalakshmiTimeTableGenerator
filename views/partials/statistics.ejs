@@ -1,0 +1,151 @@
+<div class="card border-0 shadow-sm bg-white rounded-card p-4">
+  <div class="d-flex align-items-center mb-4 pb-2 border-bottom border-light">
+    <i class="bi bi-graph-up-arrow text-teal fs-3 me-2"></i>
+    <h4 class="font-display fw-bold mb-0 text-charcoal fs-5">Schedule Statistics</h4>
+  </div>
+
+  <div class="row g-3">
+    <!-- Total Classes -->
+    <div class="col-md-3 col-sm-6">
+      <div class="p-3 bg-light rounded border border-light-subtle d-flex align-items-center">
+        <div class="stats-icon bg-charcoal-subtle text-charcoal rounded-circle p-2.5 me-3">
+          <i class="bi bi-calendar3 fs-5"></i>
+        </div>
+        <div>
+          <small class="text-muted d-block text-2xs font-sans fw-bold text-uppercase tracking-wider">Total Classes</small>
+          <span class="fs-4 fw-bold font-mono text-charcoal"><%= stats.totalClasses %></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Theory Hours -->
+    <div class="col-md-3 col-sm-6">
+      <div class="p-3 bg-light rounded border border-light-subtle d-flex align-items-center">
+        <div class="stats-icon bg-primary-subtle text-primary rounded-circle p-2.5 me-3">
+          <i class="bi bi-book fs-5"></i>
+        </div>
+        <div>
+          <small class="text-muted d-block text-2xs font-sans fw-bold text-uppercase tracking-wider">Theory Hours</small>
+          <span class="fs-4 fw-bold font-mono text-charcoal"><%= stats.totalTheoryHours %>h</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Lab Hours -->
+    <div class="col-md-3 col-sm-6">
+      <div class="p-3 bg-light rounded border border-light-subtle d-flex align-items-center">
+        <div class="stats-icon bg-success-subtle text-success rounded-circle p-2.5 me-3">
+          <i class="bi bi-cpu fs-5"></i>
+        </div>
+        <div>
+          <small class="text-muted d-block text-2xs font-sans fw-bold text-uppercase tracking-wider">Lab Hours</small>
+          <span class="fs-4 fw-bold font-mono text-charcoal"><%= stats.totalLabHours %>h</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Free Hours -->
+    <div class="col-md-3 col-sm-6">
+      <div class="p-3 bg-light rounded border border-light-subtle d-flex align-items-center">
+        <div class="stats-icon bg-warning-subtle text-warning-dark rounded-circle p-2.5 me-3">
+          <i class="bi bi-hourglass-split fs-5"></i>
+        </div>
+        <div>
+          <small class="text-muted d-block text-2xs font-sans fw-bold text-uppercase tracking-wider">Free Hours</small>
+          <span class="fs-4 fw-bold font-mono text-charcoal"><%= stats.freeHours %>h</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Morning Classes -->
+    <div class="col-md-3 col-sm-6">
+      <div class="p-3 bg-light rounded border border-light-subtle d-flex align-items-center">
+        <div class="stats-icon bg-info-subtle text-info-dark rounded-circle p-2.5 me-3">
+          <i class="bi bi-sun fs-5"></i>
+        </div>
+        <div>
+          <small class="text-muted d-block text-2xs font-sans fw-bold text-uppercase tracking-wider">Morning Classes</small>
+          <span class="fs-4 fw-bold font-mono text-charcoal"><%= stats.morningClasses %></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Evening Classes -->
+    <div class="col-md-3 col-sm-6">
+      <div class="p-3 bg-light rounded border border-light-subtle d-flex align-items-center">
+        <div class="stats-icon bg-indigo-subtle text-indigo rounded-circle p-2.5 me-3">
+          <i class="bi bi-moon-stars fs-5"></i>
+        </div>
+        <div>
+          <small class="text-muted d-block text-2xs font-sans fw-bold text-uppercase tracking-wider">Evening Classes</small>
+          <span class="fs-4 fw-bold font-mono text-charcoal"><%= stats.eveningClasses %></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Classes Before 10 AM -->
+    <div class="col-md-3 col-sm-6">
+      <div class="p-3 bg-light rounded border border-light-subtle d-flex align-items-center">
+        <div class="stats-icon bg-danger-subtle text-danger rounded-circle p-2.5 me-3">
+          <i class="bi bi-alarm fs-5"></i>
+        </div>
+        <div>
+          <small class="text-muted d-block text-2xs font-sans fw-bold text-uppercase tracking-wider">Before 10:00 AM</small>
+          <span class="fs-4 fw-bold font-mono text-charcoal"><%= stats.before10AM %></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Classes After 3 PM -->
+    <div class="col-md-3 col-sm-6">
+      <div class="p-3 bg-light rounded border border-light-subtle d-flex align-items-center">
+        <div class="stats-icon bg-pink-subtle text-pink rounded-circle p-2.5 me-3">
+          <i class="bi bi-sunset-fill fs-5"></i>
+        </div>
+        <div>
+          <small class="text-muted d-block text-2xs font-sans fw-bold text-uppercase tracking-wider">After 3:00 PM</small>
+          <span class="fs-4 fw-bold font-mono text-charcoal"><%= stats.after3PM %></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Longest Break -->
+    <div class="col-md-4 col-sm-6">
+      <div class="p-3 bg-light rounded border border-light-subtle d-flex align-items-center">
+        <div class="stats-icon bg-secondary-subtle text-secondary-dark rounded-circle p-2.5 me-3">
+          <i class="bi bi-signpost-split fs-5"></i>
+        </div>
+        <div>
+          <small class="text-muted d-block text-2xs font-sans fw-bold text-uppercase tracking-wider">Longest Break</small>
+          <span class="fs-5 fw-bold font-sans text-charcoal text-nowrap"><%= stats.longestBreak %></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Start Time -->
+    <div class="col-md-4 col-sm-6">
+      <div class="p-3 bg-light rounded border border-light-subtle d-flex align-items-center">
+        <div class="stats-icon bg-teal-subtle text-teal rounded-circle p-2.5 me-3">
+          <i class="bi bi-play-circle fs-5"></i>
+        </div>
+        <div>
+          <small class="text-muted d-block text-2xs font-sans fw-bold text-uppercase tracking-wider">Daily Start Time</small>
+          <span class="fs-5 fw-bold font-mono text-charcoal text-nowrap"><%= stats.dailyStartTime %></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily End Time -->
+    <div class="col-md-4 col-sm-12">
+      <div class="p-3 bg-light rounded border border-light-subtle d-flex align-items-center">
+        <div class="stats-icon bg-purple-subtle text-purple rounded-circle p-2.5 me-3">
+          <i class="bi bi-stop-circle fs-5"></i>
+        </div>
+        <div>
+          <small class="text-muted d-block text-2xs font-sans fw-bold text-uppercase tracking-wider">Daily End Time</small>
+          <span class="fs-5 fw-bold font-mono text-charcoal text-nowrap"><%= stats.dailyEndTime %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

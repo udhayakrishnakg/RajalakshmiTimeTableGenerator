@@ -1,0 +1,111 @@
+<div class="container-fluid py-4 px-4">
+  <div class="row g-4">
+    <!-- Left Sidebar: Selection Control Panel -->
+    <div class="col-xl-3 col-lg-4">
+      <div class="sticky-top" style="top: 20px; z-index: 1020;">
+        <%- include('partials/sidebar') %>
+      </div>
+    </div>
+
+    <!-- Right Workspace: Timetable Live Preview & Stats -->
+    <div class="col-xl-9 col-lg-8">
+      <!-- Actions & Filters Bar -->
+      <div class="card border-0 shadow-sm mb-4 bg-white p-3.5 rounded-card">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+          <!-- Filters (Checkboxes) -->
+          <div class="d-flex flex-wrap gap-x-4 gap-y-2 align-items-center" id="filters-container">
+            <span class="text-charcoal fw-bold text-sm me-1 font-sans">Filters:</span>
+            
+            <div class="form-check form-check-inline mb-0">
+              <input class="form-check-input filter-checkbox" type="checkbox" id="hide-teachers">
+              <label class="form-check-label text-sm fw-medium font-sans text-muted" for="hide-teachers">Hide Teachers</label>
+            </div>
+            
+            <div class="form-check form-check-inline mb-0">
+              <input class="form-check-input filter-checkbox" type="checkbox" id="hide-rooms">
+              <label class="form-check-label text-sm fw-medium font-sans text-muted" for="hide-rooms">Hide Rooms</label>
+            </div>
+            
+            <div class="form-check form-check-inline mb-0">
+              <input class="form-check-input filter-checkbox" type="checkbox" id="hide-batches">
+              <label class="form-check-label text-sm fw-medium font-sans text-muted" for="hide-batches">Hide Batches</label>
+            </div>
+            
+            <div class="form-check form-check-inline mb-0">
+              <input class="form-check-input filter-checkbox" type="checkbox" id="compact-view">
+              <label class="form-check-label text-sm fw-medium font-sans text-muted" for="compact-view">Compact View</label>
+            </div>
+
+            <div class="form-check form-check-inline mb-0">
+              <input class="form-check-input filter-checkbox" type="checkbox" id="only-conflicts">
+              <label class="form-check-label text-sm fw-medium font-sans text-muted" for="only-conflicts">Show Only Conflicts</label>
+            </div>
+          </div>
+
+          <!-- Quick Actions: Save & Exports -->
+          <div class="d-flex flex-wrap gap-2 align-items-center">
+            <!-- Auto Save Switch -->
+            <div class="form-check form-switch me-2 mb-0 d-flex align-items-center">
+              <input class="form-check-input" type="checkbox" role="switch" id="auto-save-toggle" style="cursor: pointer; width: 2.2em; height: 1.1em; border-color: #cbd5e1;">
+              <label class="form-check-label text-sm fw-bold text-charcoal ms-2" for="auto-save-toggle" style="cursor: pointer; user-select: none;">
+                <i class="bi bi-magic text-teal me-1"></i> Auto Save
+              </label>
+            </div>
+            <button class="btn btn-teal text-white fw-semibold px-3 py-1.5 text-sm d-flex align-items-center shadow-sm" id="btn-save">
+              <i class="bi bi-cloud-arrow-up me-1.5 fs-6"></i> Save Schedule
+            </button>
+            <button class="btn btn-outline-charcoal fw-semibold px-3 py-1.5 text-sm d-flex align-items-center shadow-sm" id="btn-export-png">
+              <i class="bi bi-filetype-png text-primary me-1.5 fs-5"></i> Save as PNG
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conflicts Alerts Panel -->
+      <div id="conflicts-container" class="mb-4">
+        <!-- Rendered via partials/conflicts.ejs -->
+      </div>
+
+      <!-- Live Timetable Preview Card -->
+      <div class="card border-0 shadow-sm mb-4 bg-white overflow-hidden rounded-card">
+        <div class="card-header bg-charcoal text-white py-3 px-4 d-flex align-items-center justify-content-between border-0">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-calendar-week text-teal me-2 fs-5"></i>
+            <h4 class="font-display fw-bold mb-0 fs-5" id="timetable-title">
+              <%= department %> (Semester <%= semester %>)
+            </h4>
+          </div>
+          <span id="live-sync-badge" class="badge bg-secondary font-mono px-2.5 py-1.5 text-xs text-uppercase d-flex align-items-center">
+            <i class="bi bi-dot text-success me-0.5 fs-5"></i> Live Sync
+          </span>
+        </div>
+        <div class="card-body p-4 bg-light-gray" style="overflow-x: auto;">
+          <div id="timetable-grid-container">
+            <!-- Rendered via partials/preview.ejs -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistics Panel -->
+      <div id="statistics-container">
+        <!-- Rendered via partials/statistics.ejs -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Embedded Parameters so Client JS can retrieve department and semester easily -->
+<div id="metadata-params" 
+     data-department="<%= department %>" 
+     data-semester="<%= semester %>" 
+     data-saved-id="<%= savedId %>"
+     style="display: none;"></div>
+
+<!-- html-to-image library for client-side PNG captures -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+
+<!-- Custom Client scripts -->
+<script src="/js/sidebar.js"></script>
+<script src="/js/preview.js"></script>
+<script src="/js/export.js"></script>
+<script src="/js/app.js"></script>

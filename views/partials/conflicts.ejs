@@ -1,0 +1,19 @@
+<% if (conflicts && conflicts.length > 0) { %>
+  <div class="alert alert-danger border-danger-subtle bg-danger-subtle text-danger-emphasis d-flex align-items-start p-4 rounded-card shadow-sm animate-shake" role="alert">
+    <i class="bi bi-exclamation-triangle-fill fs-3 me-3 mt-1 text-danger flex-shrink-0"></i>
+    <div>
+      <h5 class="alert-heading fw-bold mb-2 font-display fs-5">Conflict Detected (<%= conflicts.length %>)</h5>
+      <ul class="mb-0 ps-3 text-sm font-sans">
+        <% conflicts.forEach(c => { %>
+          <li class="mb-1.5 leading-normal">
+            <strong><%= c.code1 %></strong> (<%= c.day %> <%= c.time1 %>) conflicts with 
+            <strong><%= c.code2 %></strong> (<%= c.day %> <%= c.time2 %>)
+          </li>
+        <% }) %>
+      </ul>
+      <p class="mb-0 mt-3 text-xs text-muted font-sans">
+        * Please select different teachers, labs, or batches to resolve these overlaps. Conflicting sessions are highlighted in red on the grid.
+      </p>
+    </div>
+  </div>
+<% } %>
