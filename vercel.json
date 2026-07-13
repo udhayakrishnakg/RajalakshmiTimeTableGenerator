@@ -5,14 +5,5 @@
       "source": "/(.*)",
       "destination": "/api/index.js"
     }
-  ],
-  "functions": {
-    "api/index.js": {
-      "includeFiles": [
-        "views/**",
-        "templates/**",
-        "data/**"
-      ]
-    }
-  }
+  ]
 }
