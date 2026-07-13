@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import expressLayouts from 'express-ejs-layouts';
 import { fileURLToPath } from 'url';
+import os from 'os';
 
 import homeRouter from './routes/home.js';
 import selectRouter from './routes/select.js';
@@ -24,14 +25,20 @@ async function initialize() {
 
     console.log("Initializing application...");
 
-    await fs.ensureDir("data");
-    await fs.ensureDir("data/saved");
-
     try {
-        await buildMasterJson();
-        console.log("Schedule data ready.");
+        const savedDir = process.env.VERCEL ? path.join(os.tmpdir(), "saved") : "data/saved";
+        await fs.ensureDir(savedDir);
+
+        const masterExists = await fs.pathExists("data/master.json");
+        if (!masterExists) {
+            console.log("master.json not found. Building schedule data...");
+            await buildMasterJson();
+            console.log("Schedule data ready.");
+        } else {
+            console.log("master.json already exists. Skipping build.");
+        }
     } catch (err) {
-        console.error(err);
+        console.error("Initialization setup failed:", err);
     }
 
     app.use(express.json());
@@ -67,5 +74,17 @@ async function initialize() {
 }
 
 await initialize();
+
+const isMain = process.argv[1] && (
+    path.resolve(fileURLToPath(import.meta.url)) === path.resolve(process.argv[1]) ||
+    path.resolve(fileURLToPath(import.meta.url)) === path.resolve(process.argv[1] + '.js')
+);
+
+if (isMain) {
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+        console.log(`Server running at http://localhost:${port}`);
+    });
+}
 
 export default app;

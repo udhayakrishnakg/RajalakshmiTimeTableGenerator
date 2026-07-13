@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node app.js",
-    "build": "echo 'No build step required'",
+    "build": "node build.js",
     "start": "node app.js",
     "clean": "rm -rf dist",
     "lint": "echo 'Skipping lint checks'"
@@ -26,7 +26,6 @@
     "motion": "^12.23.24",
     "node-ical": "^0.26.1",
     "pdfkit": "^0.19.1",
-    "puppeteer": "^25.3.0",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "uuid": "^14.0.1",
