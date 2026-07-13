@@ -1,3 +1,5 @@
+process.env.IS_BUILD = 'true';
+
 import { buildMasterJson } from './lib/parser.js';
 
 console.log("Building master.json...");

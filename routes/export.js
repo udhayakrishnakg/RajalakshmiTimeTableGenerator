@@ -1,14 +1,14 @@
 import express from 'express';
-import fs from 'fs-extra';
 import { generateTimetable } from '../lib/generator.js';
 import { exportToPDF, exportToExcel, exportToICS } from '../lib/exporter.js';
+import { getMasterJson } from '../lib/parser.js';
 
 const router = express.Router();
 
 router.post('/pdf', async (req, res, next) => {
   try {
     const { department, semester, selectedTheory, selectedLabs } = req.body;
-    const master = await fs.readJson('data/master.json');
+    const master = await getMasterJson();
     const selectedSlots = generateTimetable(department, Number(semester), selectedTheory, selectedLabs, master);
 
     const pdfBuffer = await exportToPDF(selectedSlots, department, semester);
@@ -25,7 +25,7 @@ router.post('/pdf', async (req, res, next) => {
 router.post('/excel', async (req, res, next) => {
   try {
     const { department, semester, selectedTheory, selectedLabs } = req.body;
-    const master = await fs.readJson('data/master.json');
+    const master = await getMasterJson();
     const selectedSlots = generateTimetable(department, Number(semester), selectedTheory, selectedLabs, master);
 
     const excelBuffer = await exportToExcel(selectedSlots, department, semester);
@@ -42,7 +42,7 @@ router.post('/excel', async (req, res, next) => {
 router.post('/ics', async (req, res, next) => {
   try {
     const { department, semester, selectedTheory, selectedLabs } = req.body;
-    const master = await fs.readJson('data/master.json');
+    const master = await getMasterJson();
     const selectedSlots = generateTimetable(department, Number(semester), selectedTheory, selectedLabs, master);
 
     const icsString = await exportToICS(selectedSlots);

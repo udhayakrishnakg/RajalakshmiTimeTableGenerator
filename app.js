@@ -10,7 +10,7 @@ import selectRouter from './routes/select.js';
 import saveRouter from './routes/save.js';
 import exportRouter from './routes/export.js';
 
-import { buildMasterJson } from './lib/parser.js';
+import { getMasterJson } from './lib/parser.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,14 +29,9 @@ async function initialize() {
         const savedDir = process.env.VERCEL ? path.join(os.tmpdir(), "saved") : "data/saved";
         await fs.ensureDir(savedDir);
 
-        const masterExists = await fs.pathExists("data/master.json");
-        if (!masterExists) {
-            console.log("master.json not found. Building schedule data...");
-            await buildMasterJson();
-            console.log("Schedule data ready.");
-        } else {
-            console.log("master.json already exists. Skipping build.");
-        }
+        console.log("Loading/preparing schedule data...");
+        await getMasterJson();
+        console.log("Schedule data ready.");
     } catch (err) {
         console.error("Initialization setup failed:", err);
     }

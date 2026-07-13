@@ -1,9 +1,9 @@
 import express from 'express';
-import fs from 'fs-extra';
 import { getTheorySubjectsForDeptAndSem, getLabSubjectsForDeptAndSem, generateTimetable } from '../lib/generator.js';
 import { detectConflicts } from '../lib/conflict.js';
 import { calculateStatistics } from '../lib/statistics.js';
 import { loadTimetable } from '../lib/storage.js';
+import { getMasterJson } from '../lib/parser.js';
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
       return res.redirect('/');
     }
 
-    const master = await fs.readJson('data/master.json');
+    const master = await getMasterJson();
     
     const theorySubjects = getTheorySubjectsForDeptAndSem(department, Number(semester), master);
     const labSubjects = getLabSubjectsForDeptAndSem(department, Number(semester), master);
@@ -51,7 +51,7 @@ router.post('/preview', async (req, res, next) => {
   try {
     const { department, semester, selectedTheory, selectedLabs } = req.body;
     
-    const master = await fs.readJson('data/master.json');
+    const master = await getMasterJson();
     const selectedSlots = generateTimetable(department, Number(semester), selectedTheory, selectedLabs, master);
     const conflicts = detectConflicts(selectedSlots);
     const stats = calculateStatistics(selectedSlots);
